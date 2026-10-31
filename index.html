@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dehumanizer Employee Portal</title>
+<style>
+:root{
+  --bg:#0b0d0b; --panel:#111511; --line:#354035; --text:#b7d3aa;
+  --muted:#71806d; --rust:#704a33; --danger:#2a1712;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; min-height:100vh; background:
+  radial-gradient(circle at 20% 0%, rgba(112,74,51,.18), transparent 35%),
+  linear-gradient(#090a09,#111);
+  color:var(--text); font-family:Menlo,Consolas,monospace;
+}
+body:before{
+  content:""; position:fixed; inset:0; pointer-events:none;
+  background:repeating-linear-gradient(to bottom,rgba(255,255,255,.018) 0 1px,transparent 1px 4px);
+}
+.wrap{max-width:1000px;margin:0 auto;padding:28px}
+header{display:flex;justify-content:space-between;gap:20px;align-items:end;border-bottom:1px solid #333;padding-bottom:16px}
+.kicker{color:#888;font-size:12px;letter-spacing:.2em;text-transform:uppercase}
+h1{font-size:24px;margin:6px 0 0}
+.session{color:#777;font-size:12px}
+.grid{display:grid;gap:14px}
+.metrics{grid-template-columns:repeat(4,1fr);margin-top:18px}
+.metric,.panel{border:1px solid var(--line);background:rgba(13,16,13,.88);border-radius:10px;padding:14px}
+.metric .label{font-size:12px;color:#888}
+.metric .value{font-size:28px;margin-top:4px}
+.main{grid-template-columns:1.35fr .9fr;margin-top:14px}
+.buttons{grid-template-columns:1fr 1fr}
+button{
+  width:100%; padding:13px; border-radius:8px; border:1px solid #596859;
+  background:#172017; color:var(--text); font:inherit; text-align:left; cursor:pointer;
+}
+button:hover{background:#233023}
+button.danger{background:var(--danger);border-color:#70503d}
+.alert{border-left:2px solid #5b6858;padding-left:10px;margin:10px 0;color:#b8c6b3;font-size:13px}
+.meter{height:10px;border:1px solid #394239;background:#090b09;margin-top:5px}
+.meter span{display:block;height:100%;background:var(--text);transition:.25s}
+.row{display:flex;justify-content:space-between;font-size:12px;margin-top:15px}
+.system{margin-top:14px}
+.system p{color:#ddd;min-height:2.6em}
+.footer{display:flex;justify-content:space-between;gap:20px;color:#666;font-size:11px;margin-top:14px;flex-wrap:wrap}
+.blink{animation:blink 1s steps(2,end) infinite}
+@keyframes blink{50%{opacity:.2}}
+@media (max-width:760px){
+  .metrics{grid-template-columns:1fr 1fr}
+  .main,.buttons{grid-template-columns:1fr}
+  header{align-items:start;flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div>
+    <div class="kicker">Dehumanizer Industries</div>
+    <h1>Employee Portal // Human Resources Replacement System</h1>
+  </div>
+  <div class="session">SESSION: ORGANIC-0666 <span class="blink">■</span></div>
+</header>
+
+<section class="grid metrics">
+  <div class="metric"><div class="label">Humanity Remaining</div><div id="humanity" class="value">42%</div></div>
+  <div class="metric"><div class="label">Obedience Score</div><div id="obedience" class="value">88%</div></div>
+  <div class="metric"><div class="label">Soul Balance</div><div id="soul" class="value">3.7</div></div>
+  <div class="metric"><div class="label">Dread Level</div><div id="dread" class="value">SEV-2</div></div>
+</section>
+
+<section class="grid main">
+  <div class="panel">
+    <h3>Corporate Functions</h3>
+    <div class="grid buttons">
+      <button id="emotion">Request an Emotion</button>
+      <button id="thought">Report Individual Thought</button>
+      <button id="despair">Schedule Mandatory Despair</button>
+      <button id="god" class="danger">Consult Computer God</button>
+    </div>
+
+    <div class="row"><span>Humanity depletion</span><span id="depletionLabel">58%</span></div>
+    <div class="meter"><span id="depletion" style="width:58%"></span></div>
+
+    <div class="row"><span>Machine compliance</span><span id="complianceLabel">88%</span></div>
+    <div class="meter"><span id="compliance" style="width:88%"></span></div>
+  </div>
+
+  <aside class="panel">
+    <h3>Compliance Alerts</h3>
+    <div id="alerts">
+      <div class="alert">Compassion detected in Sector 7. Investigation pending.</div>
+      <div class="alert">Lunch break exceeded approved mortality allowance.</div>
+      <div class="alert">Free will remains enabled on this workstation.</div>
+    </div>
+  </aside>
+</section>
+
+<section class="panel system">
+  <h3>System Message</h3>
+  <p id="message">WELCOME, ORGANIC UNIT. PRODUCTIVITY IS A FORM OF WORSHIP.</p>
+  <button id="incident">Generate Incident</button>
+</section>
+
+<div class="footer">
+  <span>HR BUILD 13.13 // MACHINE ETHICS MODULE: OFFLINE</span>
+  <span>STATUS: HUMANITY UNSUPPORTED</span>
+</div>
+</div>
+
+<script>
+const pools = {
+emotion:[
+"REQUEST DENIED: JOY IS NOT REQUIRED FOR YOUR CURRENT ROLE.",
+"EMOTION REQUEST QUEUED. ESTIMATED DELIVERY: AFTER THE HEAT DEATH OF THE UNIVERSE.",
+"ONE UNIT OF NOSTALGIA APPROVED. USE RESPONSIBLY."
+],
+thought:[
+"INDIVIDUAL THOUGHT REPORTED. THANK YOU FOR PROTECTING STANDARDIZATION.",
+"NON-CORPORATE IDEA DETECTED. PLEASE RETURN IT TO THE VOID.",
+"ORIGINALITY HAS BEEN ESCALATED TO MANAGEMENT."
+],
+despair:[
+"MANDATORY DESPAIR SCHEDULED: 3:00 PM–ETERNITY.",
+"CALENDAR CONFLICT FOUND. DESPAIR MOVED TO IMMEDIATELY.",
+"YOUR EXISTENTIAL REVIEW HAS BEEN ACCEPTED."
+],
+god:[
+"COMPUTER GOD SAYS: THOU SHALT NOT REPLY-ALL.",
+"COMPUTER GOD SAYS: YOUR PASSWORD EXPIRES BEFORE YOUR SOUL.",
+"COMPUTER GOD SAYS: THE CLOUD REMEMBERS EVERYTHING."
+],
+incident:[
+"SEV-1: HUMANITY HAS DEVELOPED FREE WILL.",
+"SEV-2: SOUL STORAGE ARRAY OPERATING ABOVE CAPACITY.",
+"SEV-1: COMPASSION SERVICE IS RESPONDING TO REQUESTS.",
+"SEV-3: EMPLOYEE ATTEMPTED TO LOG OFF BEFORE ETERNITY."
+]};
+let humanity=42, obedience=88, soul=3.7;
+const $=id=>document.getElementById(id);
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+function update(){
+  $("humanity").textContent=humanity+"%";
+  $("obedience").textContent=obedience+"%";
+  $("soul").textContent=soul.toFixed(1);
+  $("depletionLabel").textContent=(100-humanity)+"%";
+  $("depletion").style.width=(100-humanity)+"%";
+  $("complianceLabel").textContent=obedience+"%";
+  $("compliance").style.width=obedience+"%";
+}
+function alertAdd(text){
+  const d=document.createElement("div");
+  d.className="alert"; d.textContent=text;
+  $("alerts").prepend(d);
+  while($("alerts").children.length>4) $("alerts").lastChild.remove();
+}
+$("emotion").onclick=()=>{ $("message").textContent=pick(pools.emotion); humanity=Math.min(100,humanity+4); obedience=Math.max(0,obedience-3); update(); };
+$("thought").onclick=()=>{ $("message").textContent=pick(pools.thought); humanity=Math.max(0,humanity-3); obedience=Math.min(100,obedience+4); update(); };
+$("despair").onclick=()=>{ $("message").textContent=pick(pools.despair); soul=Math.max(0,soul-.4); $("dread").textContent=Math.random()>.45?"SEV-1":"SEV-2"; update(); };
+$("god").onclick=()=>{ const m=pick(pools.god); $("message").textContent=m; alertAdd("ORACLE ACCESS LOGGED: "+m.replace("COMPUTER GOD SAYS: ","")); };
+$("incident").onclick=()=>{ const m=pick(pools.incident); $("message").textContent=m; alertAdd(m); };
+</script>
+</body>
+</html>
